@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="KorpusaKurdî logo">
+  <defs>
+    <linearGradient id="kk-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="33%" stop-color="#e63946"/>
+      <stop offset="33%" stop-color="#ffffff"/>
+      <stop offset="66%" stop-color="#ffffff"/>
+      <stop offset="66%" stop-color="#3ea66b"/>
+    </linearGradient>
+    <polygon id="ray" points="16,3.5 15.35,11.6 16.65,11.6" fill="#f4c542"/>
+  </defs>
+  <rect width="32" height="32" rx="6" fill="url(#kk-bg)"/>
+  <g>
+    <use href="#ray"/>
+    <use href="#ray" transform="rotate(17.143 16 16)"/>
+    <use href="#ray" transform="rotate(34.286 16 16)"/>
+    <use href="#ray" transform="rotate(51.429 16 16)"/>
+    <use href="#ray" transform="rotate(68.571 16 16)"/>
+    <use href="#ray" transform="rotate(85.714 16 16)"/>
+    <use href="#ray" transform="rotate(102.857 16 16)"/>
+    <use href="#ray" transform="rotate(120 16 16)"/>
+    <use href="#ray" transform="rotate(137.143 16 16)"/>
+    <use href="#ray" transform="rotate(154.286 16 16)"/>
+    <use href="#ray" transform="rotate(171.429 16 16)"/>
+    <use href="#ray" transform="rotate(188.571 16 16)"/>
+    <use href="#ray" transform="rotate(205.714 16 16)"/>
+    <use href="#ray" transform="rotate(222.857 16 16)"/>
+    <use href="#ray" transform="rotate(240 16 16)"/>
+    <use href="#ray" transform="rotate(257.143 16 16)"/>
+    <use href="#ray" transform="rotate(274.286 16 16)"/>
+    <use href="#ray" transform="rotate(291.429 16 16)"/>
+    <use href="#ray" transform="rotate(308.571 16 16)"/>
+    <use href="#ray" transform="rotate(325.714 16 16)"/>
+    <use href="#ray" transform="rotate(342.857 16 16)"/>
+  </g>
+  <circle cx="16" cy="16" r="3.6" fill="#f4c542"/>
+</svg>

@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Engineering Documentation — KorpusaKurdî</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+<style>
+  /* ---------- THEME (shared with pitch page) ---------- */
+  :root[data-theme="dark"]{
+    --bg:#0b0d12; --bg-soft:#11141b; --card:#141821; --line:#222836; --line-2:#2c3447;
+    --text:#e8ecf2; --muted:#8b94a7; --accent:#f4c542; --accent-2:#e63946; --accent-3:#3ea66b;
+    --chip:#171b25; --code-bg:#0e1218; --shadow:0 6px 22px rgba(0,0,0,.45);
+  }
+  :root[data-theme="light"]{
+    --bg:#f7f8fa; --bg-soft:#ffffff; --card:#ffffff; --line:#e6e9ef; --line-2:#d6dbe4;
+    --text:#0e1320; --muted:#5a6478; --accent:#c89200; --accent-2:#d6303d; --accent-3:#2f8f5a;
+    --chip:#f1f3f7; --code-bg:#f1f3f7; --shadow:0 4px 14px rgba(15,20,32,.06);
+  }
+  *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
+    font-size:14.5px;line-height:1.6;
+    transition:background .25s ease,color .25s ease}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+  /* ---------- NAV (shared) ---------- */
+  nav{position:sticky;top:0;z-index:30;
+    background:color-mix(in srgb,var(--bg) 75%,transparent);
+    backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:54px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:.2px;color:var(--text)}
+  .mark{width:22px;height:22px;display:block}
+  nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;font-size:13px}
+  nav ul a{color:var(--muted);transition:color .15s ease}
+  nav ul a:hover{color:var(--text);text-decoration:none}
+  .nav-actions{display:flex;align-items:center;gap:10px}
+  .nav-actions .nav-link{font-size:13px;font-weight:600;color:var(--text);letter-spacing:.2px;
+    padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;
+    transition:border-color .2s ease,background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .15s ease}
+  .nav-actions .nav-link:hover{color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 60%,var(--line));
+    background:color-mix(in srgb,var(--accent) 7%,transparent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 6%,transparent)}
+  .nav-actions .nav-link:active{transform:scale(.97)}
+  .toggle{position:relative;background:transparent;border:1px solid var(--line);
+    width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
+    border-radius:8px;cursor:pointer;color:var(--muted);padding:0;
+    transition:color .25s ease,border-color .25s ease,background-color .25s ease,box-shadow .25s ease,transform .15s ease}
+  .toggle:hover{color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 55%,var(--line));
+    background:color-mix(in srgb,var(--accent) 8%,transparent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 7%,transparent)}
+  .toggle:focus-visible{outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+  .toggle:active{transform:scale(.94)}
+  .toggle svg{position:absolute;width:16px;height:16px;
+    transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1)}
+  :root[data-theme="dark"] .toggle .icon-sun{opacity:1;transform:rotate(0) scale(1)}
+  :root[data-theme="dark"] .toggle .icon-moon{opacity:0;transform:rotate(-90deg) scale(.6)}
+  :root[data-theme="light"] .toggle .icon-sun{opacity:0;transform:rotate(90deg) scale(.6)}
+  :root[data-theme="light"] .toggle .icon-moon{opacity:1;transform:rotate(0) scale(1)}
+  :root[data-theme="dark"] .toggle:hover .icon-sun{transform:rotate(45deg)}
+  :root[data-theme="light"] .toggle:hover .icon-moon{transform:rotate(-15deg)}
+  .cta{background:var(--accent);color:#1a1a1a;padding:7px 12px;border-radius:8px;font-weight:600;font-size:13px}
+  :root[data-theme="light"] .cta{color:#fff}
+
+  /* ---------- DOC LAYOUT ---------- */
+  .doc-head{padding:42px 0 24px;border-bottom:1px solid var(--line)}
+  .doc-head .crumbs{font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .doc-head h1{font-size:32px;margin:0 0 8px;letter-spacing:-.4px}
+  .doc-head p{color:var(--muted);max-width:780px;margin:0;font-size:15px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .meta .pill-tech{font-size:11.5px;padding:4px 9px;border-radius:99px;background:var(--chip);
+    border:1px solid var(--line);color:var(--muted)}
+
+  .doc-body{display:grid;grid-template-columns:240px 1fr;gap:42px;padding:32px 0 60px;align-items:start}
+
+  /* ---------- TOC ---------- */
+  aside.toc{position:sticky;top:74px;align-self:start;font-size:13px;border-left:1px solid var(--line);padding-left:14px}
+  aside.toc .toc-title{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
+  aside.toc ol{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+  aside.toc ol a{color:var(--muted);display:block;padding:3px 0}
+  aside.toc ol a:hover{color:var(--text);text-decoration:none}
+  aside.toc ol li.sub a{padding-left:14px;font-size:12.5px}
+
+  /* ---------- CONTENT ---------- */
+  main.content section{padding:18px 0 30px;border-bottom:1px solid var(--line)}
+  main.content section:last-child{border-bottom:none}
+  main.content h2{font-size:22px;margin:18px 0 10px;letter-spacing:-.3px;scroll-margin-top:74px}
+  main.content h3{font-size:16px;margin:22px 0 8px;color:var(--text)}
+  main.content h4{font-size:14px;margin:18px 0 6px;color:var(--text);text-transform:uppercase;letter-spacing:1px;color:var(--accent)}
+  main.content p{color:var(--text);margin:0 0 10px}
+  main.content p.muted{color:var(--muted)}
+  main.content ul{padding-left:18px;color:var(--text);margin:0 0 10px}
+  main.content ul li{margin:4px 0}
+  main.content ul li::marker{color:var(--accent)}
+  main.content code{background:var(--code-bg);border:1px solid var(--line);
+    padding:1px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.5px;color:var(--text)}
+
+  /* code block */
+  pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.5px;line-height:1.55;color:var(--text);margin:10px 0 18px}
+  pre.code .k{color:var(--accent)}     /* keyword */
+  pre.code .s{color:var(--accent-3)}   /* string  */
+  pre.code .c{color:var(--muted)}      /* comment */
+  pre.code .n{color:var(--accent-2)}   /* name    */
+
+  /* tables */
+  .tbl{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);
+    border-radius:10px;overflow:hidden;font-size:13px;margin:8px 0 18px}
+  .tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{background:var(--chip);color:var(--text);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.6px}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td.muted{color:var(--muted)}
+
+  /* callouts */
+  .callout{border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent);
+    padding:12px 14px;border-radius:6px;color:var(--text);font-size:13.5px;margin:10px 0 18px}
+  .callout.warn{border-color:var(--accent-2);background:color-mix(in srgb,var(--accent-2) 8%,transparent)}
+  .callout.ok{border-color:var(--accent-3);background:color-mix(in srgb,var(--accent-3) 8%,transparent)}
+  .callout strong{color:var(--accent)}
+  .callout.warn strong{color:var(--accent-2)}
+  .callout.ok strong{color:var(--accent-3)}
+
+  /* cards */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .card h4{margin:0 0 4px;font-size:12px}
+  .card p{margin:0;color:var(--muted);font-size:12.5px}
+  .card a.card-link{display:inline-block;margin-top:8px;font-size:11.5px;color:var(--accent);font-weight:600;letter-spacing:.2px;border-bottom:1px solid transparent;padding-bottom:1px;transition:border-color .15s ease}
+  .card a.card-link:hover{border-bottom-color:var(--accent)}
+
+  /* analysis flow */
+  .flow{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:14px 0 22px;align-items:stretch}
+  .flow-step{position:relative;padding:14px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  .flow-step .step-num{display:block;font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-.5px;line-height:1;font-feature-settings:"tnum"}
+  .flow-step .step-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--text);margin:6px 0 6px}
+  .flow-step p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.55}
+  .flow-step:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:24px;color:var(--accent);font-weight:700;font-size:14px;background:var(--bg);padding:0 2px;line-height:1;z-index:1}
+
+  /* architecture diagram */
+  .arch{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 20px;align-items:stretch}
+  .arch .col{display:flex;flex-direction:column;gap:8px}
+  .arch .box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12.5px}
+  .arch .box .h{font-size:10px;letter-spacing:1.4px;color:var(--accent);text-transform:uppercase;margin-bottom:4px;font-weight:700}
+  .arch .box ul{margin:4px 0 0;padding-left:14px;color:var(--muted);font-size:12px}
+  .arch .stage-label{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:4px;font-weight:700}
+
+  /* checklist */
+  .check{display:flex;flex-direction:column;gap:6px;margin:8px 0 18px}
+  .check label{display:flex;gap:10px;align-items:flex-start;background:var(--card);
+    border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:13px;cursor:pointer}
+  .check label:hover{border-color:var(--line-2)}
+  .check input{margin-top:3px;accent-color:var(--accent)}
+
+  /* repo tree */
+  .tree{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;
+    background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;color:var(--text);white-space:pre;overflow:auto;line-height:1.55;margin:8px 0 18px}
+  .tree .d{color:var(--accent)}
+  .tree .c{color:var(--muted)}
+
+  /* footer */
+  footer{padding:24px 0 40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+
+  @media (max-width: 980px){
+    .doc-body{grid-template-columns:1fr}
+    aside.toc{position:relative;top:auto;border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:14px;margin-top:8px}
+    .arch{grid-template-columns:repeat(2,1fr)}
+    .grid-3,.grid-4{grid-template-columns:1fr 1fr}
+    .flow{grid-template-columns:repeat(3,1fr)}
+    .flow-step:nth-child(3n)::after{display:none}
+  }
+  @media (max-width: 540px){
+    nav ul{display:none}
+    .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+    .doc-head h1{font-size:26px}
+    .flow{grid-template-columns:1fr}
+    .flow-step::after{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî</a>
+    <ul>
+      <li><a href="index.html#problem">Problem</a></li>
+      <li><a href="index.html#how">How</a></li>
+      <li><a href="index.html#impact">Impact</a></li>
+      <li><a href="index.html#tech">Tech</a></li>
+      <li><a href="index.html#research">Research</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-link">Pitch</a>
+      <button class="toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.6"/>
+          <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.55 1.55M17.25 17.25l1.55 1.55M5.2 18.8l1.55-1.55M17.25 6.75l1.55-1.55"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/>
+        </svg>
+      </button>
+      <a href="index.html#cta" class="cta">Contribute</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== DOC HEAD ===================== -->
+<header class="doc-head">
+  <div class="wrap">
+    <div class="crumbs">Engineering · Onboarding · v0.1</div>
+    <h1>Engineering Documentation</h1>
+    <p>The build manual: scientific approach, system architecture, code organisation, AI/LLM pipeline, DevOps and the Day&nbsp;1 / Week&nbsp;1 / Month&nbsp;1 path for new contributors. This document complements — and does not repeat — the project pitch.</p>
+    <div class="meta">
+      <span class="pill-tech">Audience: new dev team members</span>
+      <span class="pill-tech">Status: living doc</span>
+      <span class="pill-tech">Last review: 2026-05</span>
+      <span class="pill-tech">Owner: core engineering</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap doc-body">
+
+<!-- ===================== TOC ===================== -->
+<aside class="toc">
+  <div class="toc-title">Contents</div>
+  <ol>
+    <li><a href="#read-this-first">1 · Read this first</a></li>
+    <li><a href="#linguistic-context">2 · Linguistic context</a></li>
+    <li><a href="#scientific-approach">3 · Scientific approach</a></li>
+    <li><a href="#data-analysis">4 · Data analysis &amp; outputs</a></li>
+    <li><a href="#resources">5 · Resources &amp; prior art</a></li>
+    <li><a href="#architecture">6 · System architecture</a></li>
+    <li><a href="#repos">7 · Repositories &amp; code</a></li>
+    <li><a href="#frontend">8 · Frontend (mobile)</a></li>
+    <li><a href="#backend">9 · Backend &amp; API</a></li>
+    <li><a href="#database">10 · Database design</a></li>
+    <li><a href="#ai">11 · AI / LLM pipeline</a></li>
+    <li><a href="#ocr">12 · OCR &amp; source ingestion</a></li>
+    <li><a href="#quality">13 · Quality &amp; metrics</a></li>
+    <li><a href="#devops">14 · DevOps &amp; infrastructure</a></li>
+    <li><a href="#github">15 · GitHub workflow</a></li>
+    <li><a href="#tickets">16 · Tickets &amp; sprints</a></li>
+    <li><a href="#standards">17 · Standards &amp; compliance</a></li>
+    <li><a href="#roadmap">18 · Roadmap &amp; milestones</a></li>
+    <li><a href="#onboarding">19 · Onboarding checklist</a></li>
+    <li><a href="#appendix">20 · Appendix &amp; references</a></li>
+  </ol>
+</aside>
+
+<!-- ===================== CONTENT ===================== -->
+<main class="content">
+
+<div class="callout ok" style="margin-bottom:22px">
+  <strong>Pinned links</strong>
+  <ul style="margin:8px 0 0;padding-left:18px;line-height:1.9">
+    <li>Org: <a href="https://github.com/KorpusaKurdi" target="_blank" rel="noopener">github.com/KorpusaKurdi</a></li>
+    <li>Repo: <a href="https://github.com/KorpusaKurdi/korpusa-kurdi" target="_blank" rel="noopener">github.com/KorpusaKurdi/korpusa-kurdi</a></li>
+    <li>Kanban: <a href="https://github.com/orgs/KorpusaKurdi/projects/1/views/1" target="_blank" rel="noopener">GitHub Project · Board</a></li>
+    <li>PROD env: <a href="https://korpusa-kurdi.pages.dev/" target="_blank" rel="noopener">korpusa-kurdi.pages.dev</a></li>
+  </ul>
+</div>
+
+<section id="read-this-first">
+  <h2>1 · Read this first</h2>
+  <p>Welcome. KorpusaKurdî is a <strong>Kurdish language variation tracking and documentation platform</strong> — not a standardisation project. The technical north star is to collect real usage from speakers, attach rigorous geographic metadata to every contribution, and let statistical and LLM-based analysis surface the most popular forms while preserving minority variants.</p>
+  <p>This document is a working manual. Treat it as living: open a PR if you spot anything stale.</p>
+
+  <div class="callout">
+    <strong>Engineering principle:</strong> Descriptive, not prescriptive. The platform never invents grammar — it observes, counts and surfaces. Any feature that risks "deciding for users" needs a design review before merging.
+  </div>
+
+  <h3>How to read this doc</h3>
+  <ul>
+    <li>Sections 2–4 are <strong>required reading</strong> before touching any code.</li>
+    <li>Sections 5–12 are <strong>per-discipline</strong>: jump to your area, then skim the others.</li>
+    <li>Sections 13–17 are <strong>process</strong>: workflow, tickets, onboarding checklist.</li>
+    <li>Section 18 is the <strong>reference index</strong> (papers, datasets, prior work).</li>
+  </ul>
+</section>
+
+<section id="linguistic-context">
+  <h2>2 · Linguistic context engineers must know</h2>
+  <p>You don't need to be a linguist, but you need to know enough not to design naïve schemas. Three facts will shape almost every technical decision.</p>
+
+  <h3>Dialect taxonomy</h3>
+  <table class="tbl">
+    <thead><tr><th>Dialect</th><th>Primary regions</th><th>Speakers</th><th>Structure</th><th>Script</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Kurmanji</strong> (North)</td><td>Turkey, Syria, N. Iraq (Badinan), Armenia</td><td>15–20M</td><td>Synthetic / inflected; gender, case, ergativity</td><td>Latin (Hawar)</td></tr>
+      <tr><td><strong>Sorani</strong> (Central)</td><td>Iraqi Kurdistan, W. Iran (Rojhelat)</td><td>6–12M</td><td>Analytic; no gender/case; word order</td><td>Perso-Arabic</td></tr>
+      <tr><td><strong>Southern</strong></td><td>Kermanshah, Ilam, Khanaqin</td><td>3–5M</td><td>Transitions Sorani ↔ Laki/Pehlewani</td><td>Perso-Arabic</td></tr>
+      <tr><td><strong>Zaza-Gorani</strong></td><td>Tunceli, Bingöl, Hawraman</td><td>2–3M</td><td>Distinct branch; high complexity</td><td>Varied</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">Source: cross-checked against multi-LLM research (Gemini deep-research output) and Wikipedia / Translators without Borders factsheet.</p>
+
+  <h3>Scripts &amp; the bi-directional problem</h3>
+  <table class="tbl">
+    <thead><tr><th>Feature</th><th>Hawar (Latin)</th><th>Sorani (Arabic)</th><th>Engineering impact</th></tr></thead>
+    <tbody>
+      <tr><td>Direction</td><td>LTR</td><td>RTL</td><td>UI must support bi-directional layout, mirror icons</td></tr>
+      <tr><td>Vowels</td><td>8 distinct (A, E, Ê, I, Î, O, U, Û)</td><td>Markers (و, ێ, ە)</td><td>Diacritic-aware tokenisation; never strip marks</td></tr>
+      <tr><td>Consonants</td><td>Velar / alveolar stops</td><td>Pharyngeals, uvulars (/ʕ/, /ħ/)</td><td>Phonological mapping needed for TTS / ASR</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Three-tier geographic hierarchy</h3>
+  <p>Every contribution must be tagged at three levels — this is non-negotiable and shapes the database schema.</p>
+  <ul>
+    <li><strong>Country level</strong> — TR / IQ / IR / SY (loanword influence: Turkish, Arabic, Persian).</li>
+    <li><strong>City level</strong> — major hubs (Erbil, Duhok, Diyarbakir, Mahabad…) act as dialect anchors.</li>
+    <li><strong>Region / village level</strong> — preserves hyper-local accents and lexical variants that broader classifications drop.</li>
+  </ul>
+
+  <div class="callout warn">
+    <strong>Anti-pattern:</strong> a single <code>region</code> string field. Always model country / city / locality as separate normalised columns + PostGIS point.
+  </div>
+</section>
+
+<section id="scientific-approach">
+  <h2>3 · Scientific approach: algorithmic democracy</h2>
+  <p>"Algorithmic democracy" is the working name for the four-stage pipeline that turns raw contributions into usable, regionally-tagged variant statistics — without imposing a top-down standard.</p>
+
+  <div class="grid-4">
+    <div class="card"><h4>1. Collect &amp; label</h4><p>Every datum tagged with country/city/locality + dialect self-ID + user profile metadata.</p></div>
+    <div class="card"><h4>2. Pattern extraction</h4><p>LLMs + classical NLP (clustering, frequency mining) find variants for any concept.</p></div>
+    <div class="card"><h4>3. Democratic selection</h4><p>For each context, compute most-popular form per region; never delete minorities.</p></div>
+    <div class="card"><h4>4. Living reference</h4><p>Surface results via dashboards + open API. Re-runs as new data arrives.</p></div>
+  </div>
+
+  <h3>Corpus vs. agent: a hybrid</h3>
+  <p>We deliberately build <strong>both</strong>:</p>
+  <ul>
+    <li><strong>Static corpus</strong> — the ground-truth dataset, exported under <code>CC-BY 4.0</code>, suitable for training third-party models.</li>
+    <li><strong>Dynamic agent</strong> — an interactive layer that does <em>active learning</em>: it identifies under-represented regions and prompts users to fill those gaps, plus real-time validation hints.</li>
+  </ul>
+
+  <h3>Sample tasks the agent surfaces</h3>
+  <ul>
+    <li>"Translate word X in your dialect."</li>
+    <li>"Correct this sentence from a Rudaw article."</li>
+    <li>"Record this 5-second daily snippet."</li>
+    <li>"Confirm whether you'd say <em>ez diçim bazarê</em> or <em>ez bazarê diçim</em>."</li>
+  </ul>
+</section>
+
+<section id="data-analysis">
+  <h2>4 · Data analysis &amp; outputs</h2>
+  <p>Data analysis is the bridge between contributions and insight. Every analysis we run is <strong>descriptive</strong>: we surface what speakers actually do, never decide what they should do. The result is a corpus that reveals variation rather than flattening it.</p>
+
+  <h3>Pipeline (raw → output)</h3>
+  <p class="muted">Six stages, each one auditable. Any contribution can be traced from any output back to the original speaker (anonymised, with consent), so any claim the platform makes is reproducible.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <span class="step-num">01</span>
+      <span class="step-label">Contribute</span>
+      <p>Speakers submit text, audio or labels with regional, dialect, age and register metadata.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-num">02</span>
+      <span class="step-label">Normalise</span>
+      <p>Script unification (Hawar / Sorani / Cyrillic), token cleaning, metadata validation.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-num">03</span>
+      <span class="step-label">Aggregate</span>
+      <p>Bucket contributions by region, dialect, cohort, register and time window.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-num">04</span>
+      <span class="step-label">Detect</span>
+      <p>Statistical: which forms exist, at what frequency per region. Clustering: which regions group together.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-num">05</span>
+      <span class="step-label">LLM-assist</span>
+      <p>Semantic clustering, novel-form detection, lemma proposals — always reviewed by humans before publication.</p>
+    </div>
+    <div class="flow-step">
+      <span class="step-num">06</span>
+      <span class="step-label">Publish</span>
+      <p>Outputs are versioned, signed and shipped: datasets, dashboards, APIs, papers.</p>
+    </div>
+  </div>
+
+  <h3>What the analysis measures</h3>
+  <table class="tbl">
+    <thead><tr><th>Metric</th><th>What it shows</th></tr></thead>
+    <tbody>
+      <tr><td><code>form_distribution</code></td><td>Frequency of a form across regions and dialects.</td></tr>
+      <tr><td><code>dialect_cohesion</code></td><td>How much speakers within a region agree on a single form.</td></tr>
+      <tr><td><code>variant_rarity</code></td><td>How rare a minority form is — drives the preservation index.</td></tr>
+      <tr><td><code>geographic_spread</code></td><td>How wide the geographic footprint of a form is.</td></tr>
+      <tr><td><code>temporal_drift</code></td><td>How a form's frequency changes over time (years, generations).</td></tr>
+      <tr><td><code>cross_script_map</code></td><td>The same word across Hawar, Sorani and Cyrillic spellings.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>Descriptive guarantee.</strong> The platform never declares a "correct" form. Every output carries the underlying distribution — so a reader sees both the popular form and the minority alternatives. Standardisation, if it ever happens, belongs to communities and academies, not to the corpus.
+  </div>
+
+  <h3>What the corpus enables</h3>
+  <p class="muted">Each output below is something the analysis stage can produce or feed. Some are live dashboards, some are versioned datasets, some are training corpora consumed by other projects.</p>
+
+  <div class="grid-3">
+    <div class="card">
+      <h4>Public datasets</h4>
+      <p>Versioned Parquet / JSON-L releases with full metadata, CC-BY licensed, citable.</p>
+    </div>
+    <div class="card">
+      <h4>Variation map</h4>
+      <p>Interactive geographic map: pick a word, see how it is said across regions.</p>
+    </div>
+    <div class="card">
+      <h4>Open API</h4>
+      <p>Query: "most common form for X in region Y" — JSON in, JSON out.</p>
+    </div>
+    <div class="card">
+      <h4>Living dictionary</h4>
+      <p>A reference where every entry carries regional usage frequencies — not a single "standard" form.</p>
+    </div>
+    <div class="card">
+      <h4>Academic papers</h4>
+      <p>Replicable methodology + dataset versioning lets researchers cite the exact slice they used.</p>
+    </div>
+    <div class="card">
+      <h4>Training corpora</h4>
+      <p>Cleaned, region-tagged data for TTS, STT and Kurdish-aware LLMs.</p>
+    </div>
+    <div class="card">
+      <h4>Educational materials</h4>
+      <p>Variation-aware schoolbooks: students see the range and where each form is used, not just one.</p>
+    </div>
+    <div class="card">
+      <h4>Preservation index</h4>
+      <p>A live measure of how endangered a rare form is — a signal for archivists and educators.</p>
+    </div>
+    <div class="card">
+      <h4>Journalism dashboards</h4>
+      <p>Reporters can verify "is this word really common?" and find where to interview real speakers.</p>
+    </div>
+  </div>
+</section>
+
+<section id="resources">
+  <h2>5 · Resources &amp; prior art</h2>
+  <p>Before building anything, audit what already exists. The Kurdish NLP space has scattered but real resources — datasets, toolkits, voice corpora, comparable platforms. Reuse where possible; complement rather than duplicate.</p>
+  <p class="muted">Direct links below are deliberately conservative — only canonical URLs we are confident about. For everything else, names are leads — search HuggingFace Datasets and GitHub by name to find the current home.</p>
+
+  <h3>Datasets (text)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>kurdish-ai / kurdish-corpus</h4>
+      <p>Mixed-source Kurdish text corpus on HuggingFace Datasets — fast starting point for tokenisation, embedding and language-model work.</p>
+      <a class="card-link" href="https://huggingface.co/datasets/kurdish-ai/kurdish-corpus" target="_blank" rel="noopener">huggingface.co →</a>
+    </div>
+    <div class="card">
+      <h4>OSCAR</h4>
+      <p>Massively multilingual web corpus with Kurdish slices (Kurmanji + Sorani). Useful for LM pre-training. Search HuggingFace for <code>oscar-corpus/oscar</code>.</p>
+    </div>
+    <div class="card">
+      <h4>CC-100</h4>
+      <p>Filtered Common Crawl per-language corpora with Kurdish splits. Search HuggingFace Datasets for <code>cc100</code>.</p>
+    </div>
+    <div class="card">
+      <h4>Wikipedia (Kurdish)</h4>
+      <p>Periodic dumps of Kurmanji + Sorani Wikipedia. Clean encyclopedic register — small, but high quality. Search the Wikimedia dumps site for <code>kuwiki</code> / <code>ckbwiki</code>.</p>
+    </div>
+    <div class="card">
+      <h4>Tatoeba (Kurdish)</h4>
+      <p>Crowdsourced sentence pairs with translations — useful for parallel data and sanity checks across scripts.</p>
+    </div>
+    <div class="card">
+      <h4>AgaCKNER</h4>
+      <p>Annotated NER dataset for Sorani. Smaller scale, but rare for being supervised. Search HuggingFace / GitHub by name.</p>
+    </div>
+  </div>
+
+  <h3>Voice &amp; speech</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>Mozilla Common Voice</h4>
+      <p>Open multilingual voice corpus with growing Kurdish coverage. Aligned MP3 + transcript pairs, contributor pipeline we can study.</p>
+      <a class="card-link" href="https://commonvoice.mozilla.org" target="_blank" rel="noopener">commonvoice.mozilla.org →</a>
+    </div>
+    <div class="card">
+      <h4>kurdishtts.com</h4>
+      <p>External TTS API used for synthesis. Possible STT integration. Already wired into the planned audio pipeline.</p>
+    </div>
+    <div class="card">
+      <h4>RHVoice</h4>
+      <p>Open-source TTS engine with experimental Kurdish voices. A solid base for offline / low-resource synthesis.</p>
+    </div>
+  </div>
+
+  <h3>NLP libraries &amp; tools</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>KLPT</h4>
+      <p>Kurdish Language Processing Toolkit (Sina Ahmadi). Tokenisation, lemmatisation, transliteration, normalisation across scripts. The de-facto baseline.</p>
+      <a class="card-link" href="https://github.com/sinaahmadi/KLPT" target="_blank" rel="noopener">github.com/sinaahmadi/KLPT →</a>
+    </div>
+    <div class="card">
+      <h4>Tesseract 5</h4>
+      <p>OCR engine with Kurdish-trained models for both Hawar (Latin) and Sorani (Arabic) scripts.</p>
+    </div>
+    <div class="card">
+      <h4>spaCy + custom</h4>
+      <p>Tokenisation / POS pipelines extended for Kurdish. No first-party model — community-trained, project-specific.</p>
+    </div>
+    <div class="card">
+      <h4>awesome-kurdish</h4>
+      <p>Community-maintained index of Kurdish NLP work — datasets, papers, tools. Search GitHub for <code>awesome-kurdish</code>.</p>
+    </div>
+  </div>
+
+  <h3>Comparable platforms (prior art)</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4>Common Voice (Mozilla)</h4>
+      <p>The reference for crowdsourced multilingual voice collection. Mature contribution UX, validation flow, donor experience to study.</p>
+    </div>
+    <div class="card">
+      <h4>Dia-Lingle</h4>
+      <p>ETH Zürich's gamified Swiss German dialect collection. Inspiration for a playful, low-friction contribution flow.</p>
+    </div>
+    <div class="card">
+      <h4>CorCenCC</h4>
+      <p>National Corpus of Contemporary Welsh — mobile recording, register tagging, public-facing dashboards. Closest analogue in scope and intent.</p>
+    </div>
+    <div class="card">
+      <h4>standwithkurds.org</h4>
+      <p>Action-focused single-page UX — pattern for clarity over feature density on the public-facing side.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>How we relate to these.</strong> KorpusaKurdî is not a competitor to existing Kurdish corpora or toolkits — it consumes and complements them. Where data overlaps, we deduplicate and credit. Where toolkits already work, we extend rather than rewrite. Our distinguishing focus is <em>variation tagging at the contribution level</em>, which most existing corpora do not capture.
+  </div>
+</section>
+
+<section id="architecture">
+  <h2>6 · System architecture</h2>
+  <p>Five logical stages, each independently scalable. Read left-to-right.</p>
+
+  <div class="arch">
+    <div class="col">
+      <div class="stage-label">1 · Clients</div>
+      <div class="box">
+        <div class="h">Mobile</div>
+        React Native / Flutter
+        <ul><li>Contribute UI</li><li>Voice capture</li><li>Offline queue</li></ul>
+      </div>
+      <div class="box">
+        <div class="h">Web</div>
+        Next.js dashboard
+        <ul><li>Dashboards</li><li>Moderation console</li></ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stage-label">2 · Edge</div>
+      <div class="box">
+        <div class="h">API gateway</div>
+        Cloudflare / Nginx
+        <ul><li>Rate limit</li><li>WAF</li><li>TLS</li></ul>
+      </div>
+      <div class="box">
+        <div class="h">Auth</div>
+        Auth0 / Firebase
+        <ul><li>JWT issuance</li><li>OAuth</li></ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stage-label">3 · Services</div>
+      <div class="box">
+        <div class="h">Core API</div>
+        FastAPI (Python) or Node
+        <ul><li>Contribution CRUD</li><li>Voting</li><li>Moderation queue</li></ul>
+      </div>
+      <div class="box">
+        <div class="h">Workers</div>
+        Celery / BullMQ
+        <ul><li>OCR jobs</li><li>LLM jobs</li><li>Stats refresh</li></ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="stage-label">4 · Data</div>
+      <div class="box">
+        <div class="h">Primary</div>
+        PostgreSQL + PostGIS
+      </div>
+      <div class="box">
+        <div class="h">Vector</div>
+        Pinecone / Weaviate
+      </div>
+      <div class="box">
+        <div class="h">Object</div>
+        S3-compatible (audio, scans)
+      </div>
+    </div>
+    <div class="col">
+      <div class="stage-label">5 · Intelligence</div>
+      <div class="box">
+        <div class="h">LLM layer</div>
+        Hosted (OpenAI, Anthropic, xAI) + OSS fallback
+        <ul><li>Pattern extraction</li><li>Variant clustering</li></ul>
+      </div>
+      <div class="box">
+        <div class="h">NLP toolkit</div>
+        KLPT, spaCy, custom
+        <ul><li>Tokenise / lemmatise</li><li>POS tagging</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="muted">Stages are deployed independently. The intelligence layer is async — clients never block on LLM calls.</p>
+</section>
+
+<section id="repos">
+  <h2>7 · Repositories &amp; code organisation</h2>
+  <p>The target setup is <strong>polyrepo</strong> under the <a href="https://github.com/KorpusaKurdi" target="_blank" rel="noopener"><code>KorpusaKurdi</code></a> GitHub org. A monorepo was rejected because mobile and ML pipelines have very different CI shapes.</p>
+
+  <div class="callout">
+    <strong>Today vs. target.</strong> Only <code>korpusa-kurdi</code> exists right now — it serves as project homepage, development sandbox, and this engineering doc (deployed to <a href="https://korpusa-kurdi.pages.dev/" target="_blank" rel="noopener">korpusa-kurdi.pages.dev</a>). The other repos in the table below are the target shape and will be spun up as each workstream actually starts.
+  </div>
+
+  <table class="tbl">
+    <thead><tr><th>Repo</th><th>Status</th><th>Purpose</th><th>Stack</th><th>CI target</th></tr></thead>
+    <tbody>
+      <tr><td><code>korpusa-kurdi</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:color-mix(in srgb,var(--accent-3) 18%,transparent);border:1px solid var(--accent-3);color:var(--accent-3);font-weight:600">live</span></td><td>Homepage + this doc + ADRs (today also dev sandbox)</td><td>HTML / static</td><td>Cloudflare Pages</td></tr>
+      <tr><td><code>kk-mobile</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Cross-platform contribution app</td><td>React Native + TS</td><td>EAS / Fastlane</td></tr>
+      <tr><td><code>kk-web</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Dashboards &amp; moderation console</td><td>Next.js + TS</td><td>Vercel</td></tr>
+      <tr><td><code>kk-api</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Core REST + GraphQL API</td><td>Python · FastAPI</td><td>Docker / k8s</td></tr>
+      <tr><td><code>kk-workers</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>OCR, LLM, ETL jobs</td><td>Python · Celery</td><td>Docker / k8s</td></tr>
+      <tr><td><code>kk-nlp</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Tokenisation, lemmatisation, POS</td><td>Python · KLPT</td><td>PyPI publish</td></tr>
+      <tr><td><code>kk-corpus</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Public dataset releases (CC-BY)</td><td>Parquet, JSON-L</td><td>HF datasets</td></tr>
+      <tr><td><code>kk-infra</code></td><td><span style="font-size:11px;padding:2px 8px;border-radius:99px;background:var(--chip);border:1px solid var(--line);color:var(--muted)">planned</span></td><td>Terraform, k8s manifests, Helm</td><td>Terraform · Helm</td><td>Atlantis</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size:13px;margin-top:-6px">The originally-planned <code>kk-docs</code> role is currently filled by <code>korpusa-kurdi</code>; a dedicated docs repo may split off later if scope grows.</p>
+
+  <h3>Reference code layout (kk-api)</h3>
+<pre class="tree">
+<span class="d">kk-api/</span>
+├── <span class="d">app/</span>
+│   ├── <span class="d">api/</span>           <span class="c"># FastAPI routers (v1, v2)</span>
+│   ├── <span class="d">domain/</span>        <span class="c"># business logic, no I/O</span>
+│   ├── <span class="d">infra/</span>         <span class="c"># db, queues, object storage</span>
+│   ├── <span class="d">workers/</span>       <span class="c"># celery tasks</span>
+│   └── <span class="d">schemas/</span>       <span class="c"># pydantic models</span>
+├── <span class="d">migrations/</span>       <span class="c"># alembic</span>
+├── <span class="d">tests/</span>            <span class="c"># pytest, &gt;80% coverage gate</span>
+├── pyproject.toml
+└── Dockerfile
+</pre>
+
+  <div class="callout">
+    <strong>Branching:</strong> trunk-based on <code>main</code>; short-lived feature branches; squash-merge with semantic commit messages (<code>feat:</code>, <code>fix:</code>, <code>chore:</code>, <code>docs:</code>).
+  </div>
+</section>
+
+<section id="frontend">
+  <h2>8 · Frontend (mobile)</h2>
+  <p>Mobile-first because contributors are overwhelmingly on phones, often in the diaspora or in regions with patchy connectivity.</p>
+
+  <h3>Stack decision: React Native (TypeScript)</h3>
+  <ul>
+    <li>Cross-platform, large hiring pool, web team can review.</li>
+    <li><code>i18next</code> for UI strings; ICU pluralisation.</li>
+    <li><code>react-native-mmkv</code> for offline contribution queue.</li>
+    <li><code>expo-av</code> for voice capture; opus codec for compact uploads.</li>
+  </ul>
+
+  <h3>Required UX rules</h3>
+  <ul>
+    <li>RTL toggle when the user picks a Sorani-script keyboard. Test both directions.</li>
+    <li>Never auto-correct contributions — that violates the descriptive principle.</li>
+    <li>Always show the user's region tag at the top of the contribute screen so they can correct it.</li>
+    <li>Voice capture is opt-in per session; explicit consent banner before mic access.</li>
+  </ul>
+
+  <h3>Screen inventory (MVP)</h3>
+  <ul>
+    <li><strong>Onboarding</strong> — country/city/region picker, dialect self-ID (or "guess for me").</li>
+    <li><strong>Contribute</strong> — quick type, correct-a-source, record snippet.</li>
+    <li><strong>Profile / Stats</strong> — contributions, badges, level, regional impact.</li>
+    <li><strong>Map</strong> — visual contributions per region (uses PostGIS aggregates).</li>
+  </ul>
+</section>
+
+<section id="backend">
+  <h2>9 · Backend &amp; API</h2>
+  <p>FastAPI for the synchronous edges, Celery (Redis broker) for any task that touches an LLM, OCR, or batch stats.</p>
+
+  <h3>Sample endpoints</h3>
+<pre class="code">
+<span class="c"># Submit a free-form contribution</span>
+<span class="k">POST</span> /v1/contributions
+{
+  "type": <span class="s">"text"</span>,
+  "content": <span class="s">"Ez diçim bazarê"</span>,
+  "context_concept": <span class="s">"go-to-market.1sg.present"</span>,
+  "region": { "country": <span class="s">"TR"</span>, "city": <span class="s">"Diyarbakir"</span>, "locality": <span class="s">"Sur"</span> },
+  "dialect_self_id": <span class="s">"kurmanji"</span>,
+  "source": { "type": <span class="s">"freetype"</span> }
+}
+
+<span class="c"># Vote on a candidate variant</span>
+<span class="k">POST</span> /v1/contributions/{id}/votes
+{ "value": 1 }   <span class="c"># +1 / -1</span>
+
+<span class="c"># Read the live "most popular" form for a concept + region</span>
+<span class="k">GET</span> /v1/concepts/{concept_id}/popular?country=TR&amp;city=Diyarbakir
+</pre>
+
+  <h3>Moderation queue</h3>
+  <p>Every contribution lands in a <code>pending</code> state. A row promotes to <code>accepted</code> when:</p>
+  <ul>
+    <li>≥ 3 community up-votes <em>and</em> agent-side spam check passes, or</li>
+    <li>An expert moderator (role: <code>linguist</code>) confirms it.</li>
+  </ul>
+</section>
+
+<section id="database">
+  <h2>10 · Database design</h2>
+  <p>PostgreSQL 16 + PostGIS + <code>pgvector</code>. The schema centres on three things: <em>what</em> was contributed, <em>where</em> it was contributed from, and <em>how confident</em> we are.</p>
+
+  <h3>Core tables (DDL excerpt)</h3>
+<pre class="code">
+<span class="k">CREATE TABLE</span> users (
+  id          uuid <span class="k">PRIMARY KEY</span>,
+  display     text,
+  origin_country  char(2),
+  origin_city     text,
+  origin_locality text,
+  geo         geography(Point, 4326),
+  dialect_self_id  text,         <span class="c">-- kurmanji|sorani|southern|zaza-gorani|other</span>
+  role        text <span class="k">DEFAULT</span> <span class="s">'contributor'</span>,
+  created_at  timestamptz <span class="k">DEFAULT</span> now()
+);
+
+<span class="k">CREATE TABLE</span> concepts (
+  id          uuid <span class="k">PRIMARY KEY</span>,
+  key         text <span class="k">UNIQUE</span>,    <span class="c">-- e.g. go-to-market.1sg.present</span>
+  gloss_en    text,
+  pos         text
+);
+
+<span class="k">CREATE TABLE</span> contributions (
+  id          uuid <span class="k">PRIMARY KEY</span>,
+  user_id     uuid <span class="k">REFERENCES</span> users(id),
+  concept_id  uuid <span class="k">REFERENCES</span> concepts(id),
+  type        text <span class="k">CHECK</span> (type <span class="k">IN</span> (<span class="s">'text'</span>,<span class="s">'audio'</span>,<span class="s">'correction'</span>)),
+  content     text,
+  audio_uri   text,
+  source_type text,           <span class="c">-- freetype|rudaw|book|other</span>
+  region_country  char(2),
+  region_city     text,
+  region_locality text,
+  geo         geography(Point, 4326),
+  dialect_self_id text,
+  status      text <span class="k">DEFAULT</span> <span class="s">'pending'</span>,
+  embedding   vector(384),    <span class="c">-- pgvector for semantic clustering</span>
+  created_at  timestamptz <span class="k">DEFAULT</span> now()
+);
+
+<span class="k">CREATE INDEX</span> ON contributions <span class="k">USING</span> GIST (geo);
+<span class="k">CREATE INDEX</span> ON contributions <span class="k">USING</span> ivfflat (embedding vector_cosine_ops);
+
+<span class="k">CREATE TABLE</span> votes (
+  contribution_id uuid <span class="k">REFERENCES</span> contributions(id),
+  user_id     uuid <span class="k">REFERENCES</span> users(id),
+  value       smallint <span class="k">CHECK</span> (value <span class="k">IN</span> (-1, 1)),
+  <span class="k">PRIMARY KEY</span> (contribution_id, user_id)
+);
+
+<span class="k">CREATE MATERIALIZED VIEW</span> popular_per_region <span class="k">AS</span>
+<span class="k">SELECT</span> concept_id, region_country, region_city,
+       content,
+       <span class="k">COUNT</span>(*) <span class="k">AS</span> support,
+       <span class="k">RANK</span>() <span class="k">OVER</span> (<span class="k">PARTITION BY</span> concept_id, region_country, region_city
+                    <span class="k">ORDER BY</span> <span class="k">COUNT</span>(*) <span class="k">DESC</span>) <span class="k">AS</span> rk
+<span class="k">FROM</span> contributions
+<span class="k">WHERE</span> status = <span class="s">'accepted'</span>
+<span class="k">GROUP BY</span> 1,2,3,4;
+</pre>
+
+  <div class="callout ok">
+    <strong>Why <code>geography</code> + <code>vector</code> together?</strong> The geography column powers regional dashboards and "near me" tasks; the embedding powers semantic deduplication ("Ez bazarê diçim" vs "Ez diçim bazarê" cluster as variants of one concept).
+  </div>
+</section>
+
+<section id="ai">
+  <h2>11 · AI / LLM pipeline</h2>
+  <p>AI is not the product. It is a <em>processing layer</em> that turns raw, messy crowdsourced data into structured, queryable patterns.</p>
+
+  <h3>Stages</h3>
+  <ol>
+    <li><strong>Pre-processing</strong> — KLPT (Kurdish Language Processing Toolkit) for tokenisation, stemming, lemmatisation. Critical for Sorani clitics and Kurmanji ergative alignment.</li>
+    <li><strong>Embedding</strong> — multilingual sentence transformer; store vectors in <code>pgvector</code>.</li>
+    <li><strong>Variant clustering</strong> — semantic dedupe; same concept across surface variants.</li>
+    <li><strong>Pattern extraction (LLM)</strong> — given a cluster, the LLM names the morphological/lexical variation pattern.</li>
+    <li><strong>Active learning</strong> — agent identifies low-coverage (concept × region) cells and surfaces tasks to fill them.</li>
+  </ol>
+
+  <h3>Sample LLM prompt template (variant naming)</h3>
+<pre class="code">
+<span class="c"># system</span>
+You are a Kurdish-language dialectology assistant. You do NOT propose
+a "correct" form. You name the linguistic pattern that distinguishes
+the given variants.
+
+<span class="c"># user</span>
+Concept: go-to-market.1sg.present
+Variants observed:
+  - "ez diçim bazarê"   (n=312, region=TR/Diyarbakir)
+  - "ez bazarê diçim"   (n=104, region=TR/Mardin)
+  - "min diçim bo bazař" (n=88,  region=IQ/Erbil)
+
+Return JSON:
+{
+  "pattern": "...",          <span class="c">// e.g. SOV vs SVO order</span>
+  "axes": ["word_order", "case_marking"],
+  "confidence": 0.0-1.0,
+  "minority_preserved": true
+}
+</pre>
+
+  <h3>LLMs we use (and why we cross-check)</h3>
+  <p>We treat any single model as a biased lens. Pattern-extraction prompts are run against a small ensemble (e.g. Claude, Grok, an OSS model like Llama or Qwen). Disagreement is logged and surfaced to a linguist for review.</p>
+
+  <h3>Existing Kurdish NLP we leverage</h3>
+  <ul>
+    <li><strong>KLPT</strong> — tokenisation, lemmatisation, transliteration.</li>
+    <li><strong>AgaCKNER</strong> — ~64,563 annotated tokens, Sorani NER.</li>
+    <li><strong>KurdishMT</strong>, Hugging Face Kurdish corpora — seed data.</li>
+    <li><strong>Mozilla Common Voice (Kurdish)</strong> — bootstrap voice data.</li>
+    <li><strong><code>awesome-kurdish</code></strong> GitHub list — staying-current index.</li>
+  </ul>
+</section>
+
+<section id="ocr">
+  <h2>12 · OCR &amp; source ingestion</h2>
+  <p>A meaningful portion of "good" Kurdish text is locked in scanned books, Rudaw archives, government documents. We unlock it via a <strong>"Correct-a-Source"</strong> module.</p>
+
+  <h3>Pipeline</h3>
+  <ol>
+    <li>Operator uploads a PDF / image batch into <code>kk-workers</code>.</li>
+    <li>Worker runs Tesseract 5 (fine-tuned for Kurdish scripts; we maintain our own model artefacts).</li>
+    <li>The MRWL (Max Rightmost White Line) segmentation algorithm handles cursive Arabic-script Kurdish, with reported CER ≈ 0.755% on print, much higher on handwriting.</li>
+    <li>Output is staged as <em>candidate</em> contributions with <code>source_type=book</code>.</li>
+    <li>App users see a side-by-side: scan + AI transcription, with three correction granularities — word, sentence, "quick confirm".</li>
+  </ol>
+
+  <div class="callout warn">
+    <strong>Legal:</strong> only ingest sources we have rights to (public domain, CC, partner agreements with publishers like Rudaw). Track provenance per row in <code>contributions.source_type</code> + a separate <code>source_licenses</code> table.
+  </div>
+</section>
+
+<section id="quality">
+  <h2>13 · Quality &amp; metrics</h2>
+  <p>We measure data and model quality with standard error-rate metrics so the corpus can be benchmarked alongside other low-resource language datasets.</p>
+
+  <h3>Character / Word Error Rate</h3>
+  <p>Given <code>S</code> substitutions, <code>D</code> deletions, <code>I</code> insertions and <code>N</code> reference characters (or words):</p>
+<pre class="code">
+ER = (S + D + I) / N
+</pre>
+  <p class="muted">Reported separately as CER (character) and WER (word). Track per-script (Latin Hawar vs Perso-Arabic Sorani) — they don't behave the same.</p>
+
+  <h3>Acceptance thresholds</h3>
+  <table class="tbl">
+    <thead><tr><th>Stage</th><th>Metric</th><th>Threshold</th></tr></thead>
+    <tbody>
+      <tr><td>OCR (print)</td><td>CER</td><td>&lt; 2%</td></tr>
+      <tr><td>OCR (handwritten)</td><td>CER</td><td>flagged for human review &lt; 8%</td></tr>
+      <tr><td>Crowd contributions</td><td>community votes</td><td>≥ 3 net upvotes</td></tr>
+      <tr><td>LLM pattern extraction</td><td>cross-model agreement</td><td>≥ 2 / 3 ensemble agreement</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Gamification ↔ quality</h3>
+  <p>Levels gate sensitive tasks (e.g. only Validators+ vote on others' contributions). This is both engagement and quality control.</p>
+  <table class="tbl">
+    <thead><tr><th>Level</th><th>Tasks unlocked</th><th>Reward</th></tr></thead>
+    <tbody>
+      <tr><td>Newcomer</td><td>Profile + region setup</td><td>XP</td></tr>
+      <tr><td>Contributor</td><td>Free-type, correct-a-word</td><td>Badges, micro-tokens</td></tr>
+      <tr><td>Validator</td><td>Vote on others' data</td><td>Higher token multiplier</td></tr>
+      <tr><td>Expert (Linguist)</td><td>Manage OCR datasets, localise UI</td><td>Staking rights, governance votes</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="devops">
+  <h2>14 · DevOps &amp; infrastructure</h2>
+
+  <h3>Environments</h3>
+  <ul>
+    <li><code>local</code> — docker-compose, mock LLM (Ollama), seeded Postgres.</li>
+    <li><code>dev</code> — auto-deployed from <code>main</code> on every merge.</li>
+    <li><code>staging</code> — promoted by tag <code>v*-rc.*</code>; full PII-safe seed data.</li>
+    <li><code>prod</code> — promoted by tag <code>v*</code>; behind change-management.</li>
+  </ul>
+
+  <h3>CI/CD</h3>
+  <ul>
+    <li>GitHub Actions per repo. Reusable workflows in <code>kk-infra/.github</code>.</li>
+    <li>Required checks before merge: lint, unit, integration, security scan (Trivy), license scan.</li>
+    <li>Coverage gate: 80% minimum per repo, 90% for <code>kk-api/domain</code>.</li>
+    <li>Container images pushed to GHCR; signed with cosign.</li>
+  </ul>
+
+  <h3>Observability</h3>
+  <ul>
+    <li>OpenTelemetry traces → Tempo / Grafana.</li>
+    <li>Structured JSON logs → Loki.</li>
+    <li>Metrics → Prometheus; dashboards in Grafana (per-region contribution rate is a first-class SLI).</li>
+    <li>Sentry for client + server errors.</li>
+  </ul>
+
+  <h3>Secrets</h3>
+  <p>Never commit. Local: <code>.env</code> via <code>direnv</code>. Cloud: 1Password Connect → external-secrets-operator → k8s. Rotation policy: 90 days; LLM API keys: 30 days.</p>
+</section>
+
+<section id="github">
+  <h2>15 · GitHub workflow</h2>
+
+  <h3>Repo conventions</h3>
+  <ul>
+    <li>Default branch: <code>main</code>. Protected. PRs only.</li>
+    <li>One reviewer required (two for <code>kk-api</code> and <code>kk-infra</code>).</li>
+    <li>Conventional Commits — release notes are auto-generated.</li>
+    <li><code>CODEOWNERS</code> per directory. Linguistic-sensitive code (<code>kk-nlp</code>) requires sign-off from a linguist reviewer.</li>
+  </ul>
+
+  <h3>Issue templates</h3>
+  <ul>
+    <li><code>bug.yml</code> — repro, expected, actual, region/dialect impacted.</li>
+    <li><code>feature.yml</code> — problem, proposal, descriptive-principle check.</li>
+    <li><code>data.yml</code> — corpus / source request with licensing detail.</li>
+    <li><code>research.yml</code> — references a paper / ADR / RFC.</li>
+  </ul>
+
+  <h3>Label taxonomy</h3>
+  <ul>
+    <li>Type: <code>type/bug</code>, <code>type/feat</code>, <code>type/chore</code>, <code>type/docs</code>, <code>type/research</code>.</li>
+    <li>Area: <code>area/mobile</code>, <code>area/api</code>, <code>area/nlp</code>, <code>area/ocr</code>, <code>area/infra</code>.</li>
+    <li>Priority: <code>p0</code>…<code>p3</code>.</li>
+    <li>Linguistic: <code>dialect/kurmanji</code>, <code>dialect/sorani</code>, <code>script/latin</code>, <code>script/arabic</code>.</li>
+  </ul>
+
+  <h3>RFC &amp; ADR process</h3>
+  <p>Non-trivial design changes go to <code>kk-docs/rfc</code> first. Architecture decisions captured as ADRs (one decision, one file, immutable once accepted).</p>
+</section>
+
+<section id="tickets">
+  <h2>16 · Tickets &amp; sprints</h2>
+  <p>Project tracking lives in GitHub Projects (organisation-level). Two boards:</p>
+  <ul>
+    <li><strong>Engineering</strong> — sprint board, two-week cadence, columns: Backlog → Ready → In progress → Review → Done.</li>
+    <li><strong>Roadmap</strong> — quarterly view, milestones grouped by phase (see §18).</li>
+  </ul>
+
+  <h3>Definition of Ready</h3>
+  <ul>
+    <li>Acceptance criteria written.</li>
+    <li>Linked to a milestone.</li>
+    <li>Estimated (S / M / L).</li>
+    <li>Has area + type labels.</li>
+  </ul>
+
+  <h3>Definition of Done</h3>
+  <ul>
+    <li>Tests green; coverage threshold respected.</li>
+    <li>Docs updated where behaviour changed (this file or a sibling).</li>
+    <li>Telemetry / metric added if a new flow.</li>
+    <li>Linguistic sanity-check signed off if touching <code>kk-nlp</code> or contribution flow.</li>
+    <li>Migrations applied to dev; rollback documented.</li>
+  </ul>
+</section>
+
+<section id="standards">
+  <h2>17 · Standards &amp; compliance</h2>
+
+  <h3>Code style</h3>
+  <ul>
+    <li>Python: <code>ruff</code> + <code>black</code>; type-checked with <code>mypy --strict</code> in <code>domain/</code>.</li>
+    <li>TS: ESLint + Prettier; <code>strict: true</code> in <code>tsconfig</code>.</li>
+    <li>SQL: migrations only via <code>alembic</code>; no <code>autogenerate</code> straight to prod.</li>
+  </ul>
+
+  <h3>Data licensing</h3>
+  <ul>
+    <li>Corpus releases: <strong>CC-BY 4.0</strong>.</li>
+    <li>Code: <strong>Apache 2.0</strong> unless a repo says otherwise.</li>
+    <li>Models we fine-tune: same licence as the base model unless we own all the training data.</li>
+  </ul>
+
+  <h3>Privacy &amp; ethics</h3>
+  <ul>
+    <li>GDPR-aligned consent flow on first launch and before any voice capture.</li>
+    <li>Right to deletion: hard-delete a user → soft-anonymise their contributions (keep the data for the corpus, drop the link).</li>
+    <li>No political bias or content moderation by the team — descriptive only. Hate-speech / spam handled by community + automated filters, never by editorial choice on linguistic content.</li>
+    <li>Underrepresented regions are <em>actively</em> targeted by outreach, never algorithmically penalised.</li>
+  </ul>
+
+  <div class="callout warn">
+    <strong>What we never do:</strong> "fix" a user's regional grammar. Every variant is data.
+  </div>
+</section>
+
+<section id="roadmap">
+  <h2>18 · Roadmap &amp; milestones</h2>
+  <table class="tbl">
+    <thead><tr><th>Phase</th><th>Engineering deliverable</th><th>Exit criteria</th></tr></thead>
+    <tbody>
+      <tr><td><strong>P0 · Foundations</strong></td><td>Repos, CI, infra terraformed, schema v1, auth</td><td>Hello-world contribution lands in DB end-to-end</td></tr>
+      <tr><td><strong>P1 · MVP (text only)</strong></td><td>Mobile app: contribute / correct, basic stats</td><td>≥ 100 active testers, 10k contributions across 1 country</td></tr>
+      <tr><td><strong>P2 · Seed data</strong></td><td>Import existing corpora; manual cleanup</td><td>Bootstrapped corpus ≥ 1M tokens, geo-tagged</td></tr>
+      <tr><td><strong>P3 · Voice</strong></td><td>Audio capture, opt-in, ASR ingestion</td><td>≥ 100 hours regionally-tagged audio</td></tr>
+      <tr><td><strong>P4 · LLM analysis</strong></td><td>Pattern extraction, dashboards, agent prompts</td><td>Live "popular per region" view, &lt; 1h latency</td></tr>
+      <tr><td><strong>P5 · Open API</strong></td><td>Public read API, dataset releases</td><td>First external integration (TTS / translation)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="onboarding">
+  <h2>19 · Onboarding checklist</h2>
+  <p>Tick as you go. The whole list should be done by end of week 2.</p>
+
+  <h3>Day 1 — accounts &amp; orientation</h3>
+  <div class="check">
+    <label><input type="checkbox"> GitHub access to the <code>korpusakurdi</code> org · 2FA on</label>
+    <label><input type="checkbox"> 1Password vault provisioned</label>
+    <label><input type="checkbox"> Slack / Discord channels joined: <code>#eng</code>, <code>#nlp</code>, <code>#ops</code>, <code>#standup</code></label>
+    <label><input type="checkbox"> Read §§ 2–4 of this doc (linguistic context, scientific approach, architecture)</label>
+    <label><input type="checkbox"> 30-minute pairing session with your buddy</label>
+  </div>
+
+  <h3>Week 1 — first commits</h3>
+  <div class="check">
+    <label><input type="checkbox"> Local dev environment up (<code>docker compose up</code>) — seeded Postgres, mock LLM</label>
+    <label><input type="checkbox"> Run the test suite for your area; everything green</label>
+    <label><input type="checkbox"> Pick a <code>good-first-issue</code> and ship it through the full PR loop</label>
+    <label><input type="checkbox"> Submit a contribution end-to-end on <code>dev</code> from the mobile app (or Postman)</label>
+    <label><input type="checkbox"> Open one improvement PR to this doc</label>
+  </div>
+
+  <h3>Month 1 — own a slice</h3>
+  <div class="check">
+    <label><input type="checkbox"> Lead at least one feature from issue → merged → deployed to dev</label>
+    <label><input type="checkbox"> Write or co-author one ADR or RFC</label>
+    <label><input type="checkbox"> Pair with the linguistic reviewer on a contribution-flow change</label>
+    <label><input type="checkbox"> Be on rotation as the primary reviewer for your area</label>
+    <label><input type="checkbox"> Demo your work in the bi-weekly all-hands</label>
+  </div>
+</section>
+
+<section id="appendix">
+  <h2>20 · Appendix &amp; references</h2>
+
+  <h3>Research sources behind this doc</h3>
+  <p>This document was distilled from a multi-LLM research pass — Claude, Grok, Perplexity and Gemini — cross-checked to reduce single-model bias. Where they disagreed we kept the most cautious option and flagged the disagreement here for future review.</p>
+
+  <p class="muted">External datasets, tools and comparable platforms have moved to §5 (Resources &amp; prior art) so they are easier to find before diving into the codebase.</p>
+
+  <h3>Glossary</h3>
+  <ul>
+    <li><strong>CER / WER</strong> — character / word error rate.</li>
+    <li><strong>KLPT</strong> — Kurdish Language Processing Toolkit.</li>
+    <li><strong>NER</strong> — named entity recognition.</li>
+    <li><strong>POS</strong> — part-of-speech tagging.</li>
+    <li><strong>MRWL</strong> — Max Rightmost White Line segmentation (Kurdish OCR).</li>
+    <li><strong>Algorithmic democracy</strong> — our four-stage pipeline (collect → extract → select → surface) for finding popular forms without imposing a standard.</li>
+  </ul>
+</section>
+
+</main>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap foot">
+    <div class="brand"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî · 2026</div>
+    <div>Engineering documentation · Living doc · Open a PR if anything is stale</div>
+  </div>
+</footer>
+
+<script>
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const stored = localStorage.getItem('kk-theme');
+  if (stored) root.setAttribute('data-theme', stored);
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('kk-theme', next);
+  });
+</script>
+
+</body>
+</html>

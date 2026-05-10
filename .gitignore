@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies (if/when node tooling is added)
+node_modules/
+
+# Logs
+*.log
+
+# Claude Code (personal settings, not shared across team)
+.claude/
+_claude-files/
+
+# Superpowers (Claude Code plugin config)
+.superpowers/

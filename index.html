@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>KorpusaKurdî — A Living Corpus for the Kurdish Language</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
 <style>
   /* ---------- THEME ---------- */
   :root[data-theme="dark"]{
@@ -36,6 +37,7 @@
   }
 
   *{box-sizing:border-box}
+  html{scrollbar-gutter:stable}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
     font-size:14.5px;line-height:1.55;
@@ -49,15 +51,38 @@
     backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:54px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:.2px}
-  .mark{width:22px;height:22px;border-radius:6px;background:
-    linear-gradient(135deg,var(--accent-2) 0 33%,var(--accent) 33% 66%,var(--accent-3) 66% 100%)}
-  nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;font-size:13px;color:var(--muted)}
+  .mark{width:22px;height:22px;display:block}
+  nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;font-size:13px}
+  nav ul a{color:var(--muted);transition:color .15s ease}
   nav ul a:hover{color:var(--text)}
   .nav-actions{display:flex;align-items:center;gap:10px}
-  .toggle{background:var(--chip);border:1px solid var(--line);width:34px;height:30px;
-    display:inline-flex;align-items:center;justify-content:center;border-radius:8px;
-    cursor:pointer;color:var(--text);font-size:14px}
-  .toggle:hover{border-color:var(--line-2)}
+  .nav-actions .nav-link{font-size:13px;font-weight:600;color:var(--text);letter-spacing:.2px;
+    padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;
+    transition:border-color .2s ease,background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .15s ease}
+  .nav-actions .nav-link:hover{color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 60%,var(--line));
+    background:color-mix(in srgb,var(--accent) 7%,transparent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 6%,transparent)}
+  .nav-actions .nav-link:active{transform:scale(.97)}
+  .toggle{position:relative;background:transparent;border:1px solid var(--line);
+    width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
+    border-radius:8px;cursor:pointer;color:var(--muted);padding:0;
+    transition:color .25s ease,border-color .25s ease,background-color .25s ease,box-shadow .25s ease,transform .15s ease}
+  .toggle:hover{color:var(--accent);
+    border-color:color-mix(in srgb,var(--accent) 55%,var(--line));
+    background:color-mix(in srgb,var(--accent) 8%,transparent);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 7%,transparent)}
+  .toggle:focus-visible{outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+  .toggle:active{transform:scale(.94)}
+  .toggle svg{position:absolute;width:16px;height:16px;
+    transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1)}
+  :root[data-theme="dark"] .toggle .icon-sun{opacity:1;transform:rotate(0) scale(1)}
+  :root[data-theme="dark"] .toggle .icon-moon{opacity:0;transform:rotate(-90deg) scale(.6)}
+  :root[data-theme="light"] .toggle .icon-sun{opacity:0;transform:rotate(90deg) scale(.6)}
+  :root[data-theme="light"] .toggle .icon-moon{opacity:1;transform:rotate(0) scale(1)}
+  :root[data-theme="dark"] .toggle:hover .icon-sun{transform:rotate(45deg)}
+  :root[data-theme="light"] .toggle:hover .icon-moon{transform:rotate(-15deg)}
   .cta{background:var(--accent);color:#1a1a1a;padding:7px 12px;border-radius:8px;font-weight:600;font-size:13px}
   :root[data-theme="light"] .cta{color:#fff}
 
@@ -182,18 +207,26 @@
 
 <nav>
   <div class="wrap nav-inner">
-    <div class="brand"><div class="mark"></div> KorpusaKurdî</div>
+    <a class="brand" href="index.html"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî</a>
     <ul>
-      <li><a href="#problem">Problem</a></li>
-      <li><a href="#how">How</a></li>
-      <li><a href="#impact">Impact</a></li>
-      <li><a href="#tech">Tech</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="docs.html">Docs</a></li>
+      <li><a href="index.html#problem">Problem</a></li>
+      <li><a href="index.html#how">How</a></li>
+      <li><a href="index.html#impact">Impact</a></li>
+      <li><a href="index.html#tech">Tech</a></li>
+      <li><a href="index.html#research">Research</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
-      <a href="#cta" class="cta">Contribute</a>
+      <a href="docs.html" class="nav-link">Docs</a>
+      <button class="toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.6"/>
+          <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.55 1.55M17.25 17.25l1.55 1.55M5.2 18.8l1.55-1.55M17.25 6.75l1.55-1.55"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/>
+        </svg>
+      </button>
+      <a href="index.html#cta" class="cta">Contribute</a>
     </div>
   </div>
 </nav>
@@ -222,7 +255,7 @@
             <span>9:41</span>
             <span class="pill"><span class="dot"></span> Kurmancî · Amed</span>
           </div>
-          <div style="font-weight:700;font-size:13px">Welcome back, Nûrî</div>
+          <div style="font-weight:700;font-size:13px">Welcome back, Armanc</div>
           <div style="color:var(--muted);font-size:10.5px;margin-bottom:8px">Daily contribution · 2 of 5</div>
 
           <div class="task">
@@ -387,7 +420,7 @@
 
 <footer>
   <div class="wrap foot">
-    <div class="brand"><div class="mark"></div> KorpusaKurdî · 2026</div>
+    <div class="brand"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî · 2026</div>
     <div>Descriptive, not prescriptive · Open data · Built with the community</div>
   </div>
 </footer>
@@ -397,13 +430,10 @@
   const btn = document.getElementById('themeToggle');
   const stored = localStorage.getItem('kk-theme');
   if (stored) root.setAttribute('data-theme', stored);
-  const setIcon = () => btn.textContent = root.getAttribute('data-theme') === 'dark' ? '🌙' : '☀️';
-  setIcon();
   btn.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     localStorage.setItem('kk-theme', next);
-    setIcon();
   });
 </script>
 
