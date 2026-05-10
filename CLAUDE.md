@@ -32,7 +32,6 @@ korpusa-kurdi/
 ├── assets/                 # Static assets — single source of truth
 │   ├── logo.svg            #   Brand mark (favicon + nav, both pages)
 │   ├── _old_logo.svg       #   Archived previous logo
-│   └── KurdistanFlag.png   #   Reference imagery
 ├── index.html              # Project pitch / homepage (root of korpusa-kurdi.pages.dev)
 ├── docs.html               # Engineering documentation (living doc)
 ├── CLAUDE.md               # This file

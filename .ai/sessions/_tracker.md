@@ -2,9 +2,9 @@
 
 One-line index of all sessions, **newest first**. This is the kanban — start here to see where the project stands.
 
-| Date       | Session                                 | Status |
-|------------|-----------------------------------------|--------|
-| _no active sessions yet_ |                            |        |
+| Date       | Session                                                                       | Status |
+|------------|-------------------------------------------------------------------------------|--------|
+| 2026-05-10 | [design-and-docs-foundation](2026-05-10-design-and-docs-foundation.md)        | done   |
 
 ---
 
