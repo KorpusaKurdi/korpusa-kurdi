@@ -19,7 +19,7 @@
   }
   *{box-sizing:border-box}
   html{scrollbar-gutter:stable}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);overflow-wrap:break-word;
     font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
     font-size:14.5px;line-height:1.6;
     transition:background .25s ease,color .25s ease}
@@ -78,11 +78,21 @@
     border:1px solid var(--line);color:var(--muted)}
 
   .doc-body{display:grid;grid-template-columns:240px 1fr;gap:42px;padding:32px 0 60px;align-items:start}
+  .doc-body > main.content{min-width:0}
+  .doc-body > aside.toc{min-width:0}
 
   /* ---------- TOC ---------- */
   aside.toc{position:sticky;top:74px;align-self:start;font-size:13px;border-left:1px solid var(--line);padding-left:14px}
-  aside.toc .toc-title{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:700}
-  aside.toc ol{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px}
+  aside.toc details{margin:0}
+  aside.toc summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;
+    list-style:none;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);font-weight:700;
+    padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg-soft);
+    transition:border-color .2s ease,background-color .2s ease}
+  aside.toc summary::-webkit-details-marker{display:none}
+  aside.toc summary::after{content:"▾";font-size:12px;color:var(--muted);transition:transform .25s ease}
+  aside.toc details[open] summary::after{transform:rotate(180deg)}
+  aside.toc summary:hover{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+  aside.toc ol{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
   aside.toc ol a{color:var(--muted);display:block;padding:3px 0}
   aside.toc ol a:hover{color:var(--text);text-decoration:none}
   aside.toc ol li.sub a{padding-left:14px;font-size:12.5px}
@@ -100,7 +110,7 @@
   main.content ul li::marker{color:var(--accent)}
   main.content code{background:var(--code-bg);border:1px solid var(--line);
     padding:1px 6px;border-radius:5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:12.5px;color:var(--text)}
+    font-size:12.5px;color:var(--text);overflow-wrap:anywhere;word-break:break-word}
 
   /* code block */
   pre.code{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
@@ -172,20 +182,41 @@
   footer{padding:24px 0 40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line)}
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 
+  /* desktop: TOC summary hidden, list always visible regardless of [open] */
+  @media (min-width: 981px){
+    aside.toc summary{display:none}
+    aside.toc details > ol{display:flex !important}
+    aside.toc details > ol{margin-top:0}
+  }
+
   @media (max-width: 980px){
-    .doc-body{grid-template-columns:1fr}
-    aside.toc{position:relative;top:auto;border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:14px;margin-top:8px}
+    .doc-body{grid-template-columns:1fr;gap:18px;padding:22px 0 50px}
+    aside.toc{position:sticky;top:54px;z-index:20;background:var(--bg);
+      border-left:none;border-top:none;padding-left:0;padding-top:0;margin:0 0 8px;
+      padding-bottom:8px}
+    aside.toc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;
+      background:linear-gradient(to bottom,var(--bg),transparent);pointer-events:none}
+    aside.toc details[open] > ol{max-height:60vh;overflow-y:auto;padding-right:6px}
     .arch{grid-template-columns:repeat(2,1fr)}
     .grid-3,.grid-4{grid-template-columns:1fr 1fr}
     .flow{grid-template-columns:repeat(3,1fr)}
     .flow-step:nth-child(3n)::after{display:none}
   }
   @media (max-width: 540px){
+    .wrap{padding:0 16px}
     nav ul{display:none}
     .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
-    .doc-head h1{font-size:26px}
+    .doc-head{padding:24px 0 18px}
+    .doc-head h1{font-size:24px}
+    .doc-head p{font-size:14px}
+    main.content h2{font-size:19px}
+    main.content h3{font-size:15px}
+    main.content section{padding:14px 0 22px}
     .flow{grid-template-columns:1fr}
     .flow-step::after{display:none}
+    .tbl{font-size:12px}
+    .tbl th,.tbl td{padding:6px 8px}
+    .arch{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -237,9 +268,10 @@
 
 <!-- ===================== TOC ===================== -->
 <aside class="toc">
-  <div class="toc-title">Contents</div>
-  <ol>
-    <li><a href="#read-this-first">1 · Read this first</a></li>
+  <details>
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#read-this-first">1 · Read this first</a></li>
     <li><a href="#linguistic-context">2 · Linguistic context</a></li>
     <li><a href="#scientific-approach">3 · Scientific approach</a></li>
     <li><a href="#data-analysis">4 · Data analysis &amp; outputs</a></li>
@@ -259,7 +291,8 @@
     <li><a href="#roadmap">18 · Roadmap &amp; milestones</a></li>
     <li><a href="#onboarding">19 · Onboarding checklist</a></li>
     <li><a href="#appendix">20 · Appendix &amp; references</a></li>
-  </ol>
+    </ol>
+  </details>
 </aside>
 
 <!-- ===================== CONTENT ===================== -->
