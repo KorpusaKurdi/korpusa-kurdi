@@ -5,68 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Engineering Documentation — KorpusaKurdî</title>
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+<link rel="stylesheet" href="assets/shared.css" />
+<script src="assets/shared.js"></script>
 <style>
-  /* ---------- THEME (shared with pitch page) ---------- */
-  :root[data-theme="dark"]{
-    --bg:#0b0d12; --bg-soft:#11141b; --card:#141821; --line:#222836; --line-2:#2c3447;
-    --text:#e8ecf2; --muted:#8b94a7; --accent:#f4c542; --accent-2:#e63946; --accent-3:#3ea66b;
-    --chip:#171b25; --code-bg:#0e1218; --shadow:0 6px 22px rgba(0,0,0,.45);
-  }
-  :root[data-theme="light"]{
-    --bg:#f7f8fa; --bg-soft:#ffffff; --card:#ffffff; --line:#e6e9ef; --line-2:#d6dbe4;
-    --text:#0e1320; --muted:#5a6478; --accent:#c89200; --accent-2:#d6303d; --accent-3:#2f8f5a;
-    --chip:#f1f3f7; --code-bg:#f1f3f7; --shadow:0 4px 14px rgba(15,20,32,.06);
-  }
-  *{box-sizing:border-box}
-  html{scrollbar-gutter:stable}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);overflow-wrap:break-word;
-    font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
-    font-size:14.5px;line-height:1.6;
-    transition:background .25s ease,color .25s ease}
-  a{color:var(--accent);text-decoration:none}
-  a:hover{text-decoration:underline}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
-
-  /* ---------- NAV (shared) ---------- */
-  nav{position:sticky;top:0;z-index:30;
-    background:color-mix(in srgb,var(--bg) 75%,transparent);
-    backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:54px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:.2px;color:var(--text)}
-  .mark{width:22px;height:22px;display:block}
-  nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;font-size:13px}
-  nav ul a{color:var(--muted);transition:color .15s ease}
-  nav ul a:hover{color:var(--text);text-decoration:none}
-  .nav-actions{display:flex;align-items:center;gap:10px}
-  .nav-actions .nav-link{font-size:13px;font-weight:600;color:var(--text);letter-spacing:.2px;
-    padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;
-    transition:border-color .2s ease,background-color .2s ease,color .2s ease,box-shadow .2s ease,transform .15s ease}
-  .nav-actions .nav-link:hover{color:var(--accent);
-    border-color:color-mix(in srgb,var(--accent) 60%,var(--line));
-    background:color-mix(in srgb,var(--accent) 7%,transparent);
-    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 6%,transparent)}
-  .nav-actions .nav-link:active{transform:scale(.97)}
-  .toggle{position:relative;background:transparent;border:1px solid var(--line);
-    width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
-    border-radius:8px;cursor:pointer;color:var(--muted);padding:0;
-    transition:color .25s ease,border-color .25s ease,background-color .25s ease,box-shadow .25s ease,transform .15s ease}
-  .toggle:hover{color:var(--accent);
-    border-color:color-mix(in srgb,var(--accent) 55%,var(--line));
-    background:color-mix(in srgb,var(--accent) 8%,transparent);
-    box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 7%,transparent)}
-  .toggle:focus-visible{outline:none;border-color:var(--accent);
-    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
-  .toggle:active{transform:scale(.94)}
-  .toggle svg{position:absolute;width:16px;height:16px;
-    transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1)}
-  :root[data-theme="dark"] .toggle .icon-sun{opacity:1;transform:rotate(0) scale(1)}
-  :root[data-theme="dark"] .toggle .icon-moon{opacity:0;transform:rotate(-90deg) scale(.6)}
-  :root[data-theme="light"] .toggle .icon-sun{opacity:0;transform:rotate(90deg) scale(.6)}
-  :root[data-theme="light"] .toggle .icon-moon{opacity:1;transform:rotate(0) scale(1)}
-  :root[data-theme="dark"] .toggle:hover .icon-sun{transform:rotate(45deg)}
-  :root[data-theme="light"] .toggle:hover .icon-moon{transform:rotate(-15deg)}
-  .cta{background:var(--accent);color:#1a1a1a;padding:7px 12px;border-radius:8px;font-weight:600;font-size:13px}
-  :root[data-theme="light"] .cta{color:#fff}
+  /* Docs uses a wider wrap than the shared default */
+  .wrap{max-width:1180px}
+  /* Docs has its own body line-height */
+  html,body{line-height:1.6}
 
   /* ---------- DOC LAYOUT ---------- */
   .doc-head{padding:42px 0 24px;border-bottom:1px solid var(--line)}
@@ -223,7 +168,7 @@
 <body>
 
 <!-- ===================== NAV ===================== -->
-<nav>
+<nav class="site-nav">
   <div class="wrap nav-inner">
     <a class="brand" href="index.html"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî</a>
     <ul>
@@ -244,7 +189,7 @@
           <path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/>
         </svg>
       </button>
-      <a href="index.html#cta" class="cta">Contribute</a>
+      <a href="mockup.html" class="cta">Try the app</a>
     </div>
   </div>
 </nav>
@@ -1130,24 +1075,12 @@ ER = (S + D + I) / N
 </div>
 
 <!-- ===================== FOOTER ===================== -->
-<footer>
+<footer class="site-footer">
   <div class="wrap foot">
     <div class="brand"><img class="mark" src="assets/logo.svg" alt="" /> KorpusaKurdî · 2026</div>
     <div>Engineering documentation · Living doc · Open a PR if anything is stale</div>
   </div>
 </footer>
-
-<script>
-  const root = document.documentElement;
-  const btn = document.getElementById('themeToggle');
-  const stored = localStorage.getItem('kk-theme');
-  if (stored) root.setAttribute('data-theme', stored);
-  btn.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('kk-theme', next);
-  });
-</script>
 
 </body>
 </html>
