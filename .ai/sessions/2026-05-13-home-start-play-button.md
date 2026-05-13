@@ -39,5 +39,15 @@ Add an entry point on `index.html` that opens the mockup app — and build a fir
 | `kk-contributions` | mockup.html | array of `{id, taskId, type, response, audioMeta, name, dialect, region, createdAt}` |
 
 ## Next Steps
-- Visual review on real devices (mobile + desktop).
-- If we keep going: real Kurdish-aware prompt set (currently seeded with 8 generic prompts), POST endpoint for contributions, server-side dialect normalisation, dashboard linkback from the community-pulse card.
+This session ships an MVP shell — it's deliberately a starting point, not a finished design. Armanc will master `mockup.html` in a new session, bringing his own product direction plus team input. From there we'll keep iterating, but **each refinement becomes its own ticket and its own session** rather than one giant rewrite.
+
+Likely follow-up tickets (created when each is picked up):
+- **mockup-master / direction pass** — Armanc + team align on the app's product shape (screens, tone, language model). Output is a refreshed spec that supersedes the v0 choices in this session.
+- **Prompt seed set** — replace the 8 generic seed tasks with a real, Kurdish-aware prompt set (Kurmancî / Soranî / Southern, dialect-aware variants, sourced/curated).
+- **Backend handoff** — POST endpoint for contributions; swap localStorage for real persistence; server-side dialect/region normalisation.
+- **Voice pipeline** — upload audio blobs (currently discarded after preview), storage, transcript stub.
+- **Community pulse → live data** — wire the "1,247 entries this week" card to real aggregated stats instead of placeholder copy.
+- **Real onboarding flow** — proper region picker (geo / dropdown), consent screen for voice and data use (GDPR-aligned per project goals).
+- **i18n** — Kurdish/Turkish/English UI language toggle (separate from dialect-of-contribution).
+
+Refactor stays opportunistic in those tickets — no need for a dedicated cleanup session.
